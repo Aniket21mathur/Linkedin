@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>welcome</title>
+</head>
+<body>
+	{% csrf_token %}
+Welcome to linkedin!
+<br>
+Already registered?
+<br>
+<a href="{% url 'lgin' %}">Sign in</a>
+<br>
+Register here
+<br>
+<a href="{% url 'reg' %}">Sign up</a>
+
+
+</body>
+</html>
