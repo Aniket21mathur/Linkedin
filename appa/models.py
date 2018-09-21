@@ -9,7 +9,7 @@ class RegistrationForm(models.Model):
 	DOB=models.DateField()
 	Skill=models.CharField(max_length=200,default="Your skills")
 	Experience=models.CharField(max_length=200,default="Your Experience")
-	image=models.ImageField(upload_to='profile_image',blank=True)
+	image=models.ImageField(upload_to='appa/templates/html/profile_image',blank=True)
 
 		
 class MyNetwork(models.Model):
@@ -22,15 +22,7 @@ class Job(models.Model):
 	user=models.ForeignKey(RegistrationForm,on_delete=models.CASCADE)
 	jobs_text=models.CharField(max_length=200)
 	def __str__(self):
-		return self.jobs_text	
-
-
-class Notification(models.Model):
-	user=models.ForeignKey(RegistrationForm,on_delete=models.CASCADE)
-	username_text=models.CharField(max_length=32)
-	notifications_text=models.CharField(max_length=200)
-	def __str__(self):
-		return self.notifications_text			
+		return self.jobs_text			
 
 class Post(models.Model):
 	user=models.ForeignKey(RegistrationForm,on_delete=models.CASCADE)

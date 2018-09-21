@@ -44,7 +44,7 @@ def login(request):
 				user=None
 				password=None	
 			if(user is not None and password is not None and request.POST['Password']==user.Password ):
-				return HttpResponse('welcome')
+				return render(request,'html/main.html',{'user':user})
 			else:
 				return HttpResponse('invalid email or password')
 				
