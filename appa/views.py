@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from appa.forms import Register,Login,Search
-from appa.models import RegistrationForm
+from appa.forms import Register,Login,Search,Posts
+from appa.models import RegistrationForm,Post
 from django.http import HttpResponse
 from django import forms
 
@@ -9,6 +9,10 @@ class firstview(TemplateView):
 	template_name='html/home.html'
 	def homeview(self,request):
 		return render(request,'html/home.html')
+
+
+activeuser=None
+searchuser=None
 
 def register(request):
 	if request.method == 'POST':
@@ -30,21 +34,22 @@ def register(request):
 
 
 def login(request):
+	global activeuser
 	if request.method =='POST':
 		form=Login(request.POST)
 		if form.is_valid():
 			userObj=form.cleaned_data
 			try:
 
-				user=RegistrationForm.objects.get(Email=request.POST['Email'])
+				activeuser=RegistrationForm.objects.get(Email=request.POST['Email'])
 				password=RegistrationForm.objects.get(Password=request.POST['Password'])
 
 
 			except RegistrationForm.DoesNotExist:
-				user=None
+				activeuser=None
 				password=None	
-			if(user is not None and password is not None and request.POST['Password']==user.Password ):
-				return render(request,'html/main.html',{'user':user})
+			if(activeuser is not None and password is not None and request.POST['Password']==activeuser.Password ):
+				return render(request,'html/main.html',{'user':activeuser})
 			else:
 				return HttpResponse('invalid email or password')
 				
@@ -59,17 +64,18 @@ def login(request):
 
 
 def search(request):
+	global searchuser
 	if request.method =='POST':
 		form=Search(request.POST)
 		if form.is_valid():
 			userObj=form.cleaned_data
 			try:
-				user=RegistrationForm.objects.get(FirstName=request.POST['FirstName'])
+				searchuser=RegistrationForm.objects.get(FirstName=request.POST['FirstName'])
 			except RegistrationForm.DoesNotExist:				
-				user=None
+				searchuser=None
 					
-			if(user is not None and request.POST['LastName']==user.LastName ):
-				return render(request,'html/main.html',{'user':user})
+			if(searchuser is not None and request.POST['LastName']==searchuser.LastName ):
+				return render(request,'html/main.html',{'user':searchuser})
 			else:
 				return HttpResponse('user not found')
 				
@@ -81,6 +87,45 @@ def search(request):
 
 
 	return render(request,'html/search.html',{'form':form})	
+
+
+def logout(request):
+	global user
+	user=None
+	return render(request,'html/logout.html')
+
+
+def posts(request):
+	global activeuser
+	post_list=Post.objects.all()
+	if request.method =='POST':
+		form=Posts(request.POST)
+		if form.is_valid():
+
+			form.save()
+			
+				
+			
+		else:
+			return HttpResponse('fill the entries properly')
+	else:
+		form=Posts()
+
+
+	return render(request,'html/posts.html',{'form':form,'post_list':post_list})		
+
+	
+
+
+
+
+
+
+
+
+
+
+
 	
 
 

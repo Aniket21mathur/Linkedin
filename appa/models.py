@@ -10,6 +10,8 @@ class RegistrationForm(models.Model):
 	Skill=models.CharField(max_length=200,default="Your skills")
 	Experience=models.CharField(max_length=200,default="Your Experience")
 	image=models.ImageField(upload_to='appa/templates/html/profile_image',blank=True)
+	def __str__(self):
+		return self.Email
 
 		
 class MyNetwork(models.Model):
