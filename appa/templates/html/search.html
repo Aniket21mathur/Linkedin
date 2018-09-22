@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Login</title>
+	<title>Search</title>
 </head>
 <body>
 <form method="POST">
 	{% csrf_token %}
 {{ form.as_p }}
-<input type="submit" name="submit" value="Login">
+<input type="submit" name="submit" value="Search">
 </form>
-<a href="{% url 'home' %}">Return to home page</a>
 </body>
 </html>

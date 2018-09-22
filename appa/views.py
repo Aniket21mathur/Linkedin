@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from appa.forms import Register,Login
+from appa.forms import Register,Login,Search
 from appa.models import RegistrationForm
 from django.http import HttpResponse
 from django import forms
@@ -55,7 +55,37 @@ def login(request):
 		form=Login()
 
 
-	return render(request,'html/login.html',{'form':form})		
+	return render(request,'html/login.html',{'form':form})	
+
+
+def search(request):
+	if request.method =='POST':
+		form=Search(request.POST)
+		if form.is_valid():
+			userObj=form.cleaned_data
+			try:
+				user=RegistrationForm.objects.get(FirstName=request.POST['FirstName'])
+			except RegistrationForm.DoesNotExist:				
+				user=None
+					
+			if(user is not None and request.POST['LastName']==user.LastName ):
+				return render(request,'html/main.html',{'user':user})
+			else:
+				return HttpResponse('user not found')
+				
+			
+		else:
+			return HttpResponse('enter a proper name to search')
+	else:
+		form=Search()
+
+
+	return render(request,'html/search.html',{'form':form})	
+	
+
+
+
+				
 
 					
 					

@@ -11,3 +11,9 @@ class Login(forms.ModelForm):
 	class Meta:
 		model=RegistrationForm
 		fields=('Email','Password',)
+
+class Search(forms.ModelForm):
+	class Meta:
+		model=RegistrationForm
+		fields=('FirstName','LastName',)
+		

@@ -15,11 +15,12 @@
 		<li><a href="{% url 'lgin' %}">Logout</a></li>
 		<li><a href="">MyNetwork</a></li>
 		<li><a href="">Jobs</a></li>
+		<li><a href="{% url 'srch' %}">Search</a></li>
 </ul>
 	</div>
 	{% load staticfiles %}
-<p>Welcome {{ user.FirstName }} {{ user.LastName }} </p>
-<img src="{{ user.image.url }}">
+<p>Linked in-- {{ user.FirstName }} {{ user.LastName }} </p>
+<img src="{{ user.image.url }}" alt="Image not found">
 <p>{{ user.Experience }}</p>
 <p>{{ user.Skill }}</p>
 </body>
