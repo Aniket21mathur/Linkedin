@@ -14,10 +14,10 @@
 		<ul>
 		<li><a href="{% url 'lgout' %}">Logout</a></li>
 		<li><a href="">MyNetwork</a></li>
-		<li><a href="">Jobs</a></li>
 		<li><a href="{% url 'srch' %}">Search</a></li>
 		<li><a href="">Follow this user</a></li>
 		<li><a href="{% url 'pst' %}">WritePost</a></li>
+		<li><a href="{% url 'cmmt' %}">Comment</a></li>
 </ul>
 	</div>
 
@@ -33,6 +33,12 @@
 <li>{{ post.user }}</li>
 <br>
     <li>{{ post.posts_text }}</li>
+    <br>
+    {% for comments in post.comment_set.all%}
+    <li>{{ comments.username_text }}</li>
+    <br>
+    <li>{{ comments.comment_text }}</li>
+    {% endfor %}
     <br>
     <br>
 {% endfor %}

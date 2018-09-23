@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from appa.forms import Register,Login,Search,Posts
+from appa.forms import Register,Login,Search,Posts,Comments
 from appa.models import RegistrationForm,Post
 from django.http import HttpResponse
 from django import forms
@@ -112,7 +112,28 @@ def posts(request):
 		form=Posts()
 
 
-	return render(request,'html/posts.html',{'form':form,'post_list':post_list})		
+	return render(request,'html/posts.html',{'form':form,'post_list':post_list})
+
+
+def comment(request):
+	global activeuser
+	if request.method=='POST':
+		form=Comments(request.POST)
+		if form.is_valid():
+
+			form.save()
+			
+				
+			
+		else:
+			return HttpResponse('fill the entries properly')
+	else:
+		form=Comments()
+
+
+	return render(request,'html/comment.html',{'form':form})
+
+
 
 	
 

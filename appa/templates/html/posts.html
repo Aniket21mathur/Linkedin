@@ -10,18 +10,21 @@
 	{% csrf_token %}
 {{ form.as_p }}
 <input type="submit" name="submit" value="Posts">
+</form>
 <br><br>
 <ul>
 <h1>Posts</h1>
 <br>
 {% for posts in post_list %}
 <li>{{ posts.user }}</li>
-<br>
     <li>{{ posts.posts_text }}</li>
+    {% for comments in posts.comment_set.all%}
+    <li>{{ comments.username_text }}</li>
+    <li>{{ comments.comment_text }}</li>
+    {% endfor %}
     <br>
     <br>
 {% endfor %}
 </ul>
-</form>
 </body>
 </html>

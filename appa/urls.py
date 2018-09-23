@@ -10,6 +10,7 @@ url(r'^login/$',appa_views.login, name='lgin'),
 url(r'^login/search/$',appa_views.search, name='srch'),
 url(r'^logout/$',appa_views.logout, name='lgout'),
 url(r'^login/posts/$',appa_views.posts, name='pst'),
+url(r'^login/comments/$',appa_views.comment, name='cmmt'),
 
 
 
