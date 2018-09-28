@@ -11,6 +11,8 @@
 {{ form.as_p }}
 <input type="submit" name="submit" value="Posts">
 </form>
+<br>
+<a href="http://127.0.0.1:8000/profile/?next=/login/">Back to your Profile</a>
 <br><br>
 <ul>
 <h1>Posts</h1>
@@ -21,7 +23,7 @@
     {% for comments in posts.comment_set.all%}
     <li>{{ comments.username_text }}</li>
     <li>{{ comments.comment_text }}</li>
-    {% endfor %}
+    {% endfor %} 
     <br>
     <br>
 {% endfor %}

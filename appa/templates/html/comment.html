@@ -4,6 +4,7 @@
 	<title>AddComment</title>
 </head>
 <body>
+	<a href="http://127.0.0.1:8000/profile/?next=/login/">Back to your Profile</a>
 <form method="POST">
 	{% csrf_token %}
 {{ form.as_p }}

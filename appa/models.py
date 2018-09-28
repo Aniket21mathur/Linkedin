@@ -29,7 +29,7 @@ class Job(models.Model):
 		return self.jobs_text			
 
 class Post(models.Model):
-	user=models.ForeignKey(RegistrationForm,on_delete=models.CASCADE)
+	user=models.ForeignKey(User,on_delete=models.CASCADE)
 	posts_text=models.CharField(max_length=200)
 	def __str__(self):
 		return self.posts_text				

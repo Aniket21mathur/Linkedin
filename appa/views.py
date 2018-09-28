@@ -1,10 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.generic import TemplateView
 from appa.forms import SignUpForm,Login,Search,Posts,Comments
 from appa.models import RegistrationForm,Post
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django import forms
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import authenticate, login as auth_login,logout as auth_logout
+from django.conf import settings
+
+
 
 class firstview(TemplateView):
 	template_name='html/home.html'
@@ -24,6 +28,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             auth_login(request, user)
+            return redirect('%s?next=%s' % (settings.LOGIN_REDIRECT_URL, request.path))
             
     else:
         form = SignUpForm()
@@ -85,8 +90,8 @@ def login(request):
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
 			auth_login(request, user)
-			return HttpResponse('valid user')
-        
+			return redirect('%s?next=%s' % (settings.LOGIN_REDIRECT_URL, request.path))
+		        
 		else:
 			return HttpResponse('invalid response')
 	else:
@@ -97,17 +102,16 @@ def login(request):
 
 
 def search(request):
-	global searchuser
 	if request.method =='POST':
 		form=Search(request.POST)
 		if form.is_valid():
 			userObj=form.cleaned_data
 			try:
-				searchuser=RegistrationForm.objects.get(FirstName=request.POST['FirstName'])
-			except RegistrationForm.DoesNotExist:				
+				searchuser=User.objects.get(username=request.POST['username'])
+			except User.DoesNotExist:				
 				searchuser=None
 					
-			if(searchuser is not None and request.POST['LastName']==searchuser.LastName ):
+			if(searchuser is not None ):
 				return render(request,'html/main.html',{'user':searchuser})
 			else:
 				return HttpResponse('user not found')
@@ -123,48 +127,63 @@ def search(request):
 
 
 def logout(request):
-	global user
-	user=None
+	auth_logout(request)
 	return render(request,'html/logout.html')
+
+def profilepage(request):
+	return render(request,'html/main.html',{'user':request.user})
+
+
 
 
 def posts(request):
-	global activeuser
-	post_list=Post.objects.all()
-	if request.method =='POST':
-		form=Posts(request.POST)
-		if form.is_valid():
+	if request.user.is_authenticated:
+		post_list=Post.objects.all()
+		if request.method =='POST':
+			form=Posts(request.POST)
+			if form.is_valid():
 
-			form.save()
-			
+				forma=form.save(commit=False)
+				forma.user=request.user
+				forma.save()
 				
 			
+			else:
+				return HttpResponse('fill the entries properly')
 		else:
-			return HttpResponse('fill the entries properly')
+			form=Posts()
+
+
+		return render(request,'html/posts.html',{'form':form,'post_list':post_list,})
 	else:
-		form=Posts()
-
-
-	return render(request,'html/posts.html',{'form':form,'post_list':post_list})
-
+		return redirect('%s?next=%s' % (settings.LOGIN_REDIRECT_URL, request.path))
 
 def comment(request):
-	global activeuser
-	if request.method=='POST':
-		form=Comments(request.POST)
-		if form.is_valid():
+	if request.user.is_authenticated:
 
-			form.save()
-			
+		if request.method=='POST':
+			form=Comments(request.POST)
+			if form.is_valid():
+
+				
+				formb=form.save(commit=False)
+				formb.username_text=request.user
+				formb.save()
+				
 				
 			
+			else:
+				return HttpResponse('fill the entries properly')
 		else:
-			return HttpResponse('fill the entries properly')
+			form=Comments()
+
+
+		return render(request,'html/comment.html',{'form':form})
 	else:
-		form=Comments()
+		return redirect('%s?next=%s' % (settings.LOGIN_REDIRECT_URL, request.path))
 
 
-	return render(request,'html/comment.html',{'form':form})
+		
 
 
 

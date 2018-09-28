@@ -26,21 +26,19 @@ class Login(forms.ModelForm):
 		fields=('username','password',)
 		
 
-class Search(forms.ModelForm):
-	class Meta:
-		model=RegistrationForm
-		fields=('FirstName','LastName',)
+class Search(forms.Form):
+	username=forms.CharField(label='username')
 
 class Posts(forms.ModelForm):
 	class Meta:
 		model=Post
-		fields=('user','posts_text',)
+		fields=('posts_text',)
 
 
 class Comments(forms.ModelForm):
 	class Meta:
 		model=Comment
-		fields=('post','comment_text','username_text',)
+		fields=('post','comment_text',)
 
 
 
