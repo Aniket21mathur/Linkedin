@@ -5,7 +5,7 @@ urlpatterns = [
 
 
 url(r'^$',appa_views.firstview.as_view(), name='home'),
-url(r'^register/$',appa_views.register, name='reg'),
+url(r'^register/$',appa_views.signup, name='reg'),
 url(r'^login/$',appa_views.login, name='lgin'),
 url(r'^login/search/$',appa_views.search, name='srch'),
 url(r'^logout/$',appa_views.logout, name='lgout'),

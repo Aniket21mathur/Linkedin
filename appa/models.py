@@ -1,5 +1,7 @@
 from django.db import models
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 class RegistrationForm(models.Model):
 	FirstName=models.CharField(max_length=30)
@@ -37,4 +39,4 @@ class Comment(models.Model):
 	comment_text=models.CharField(max_length=200)
 	username_text=models.CharField(max_length=32)
 	def __str__(self):
-		return self.comment_text				
+		return self.comment_text		

@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from appa.forms import Register,Login,Search,Posts,Comments
+from appa.forms import SignUpForm,Login,Search,Posts,Comments
 from appa.models import RegistrationForm,Post
 from django.http import HttpResponse
 from django import forms
+from django.contrib.auth import authenticate, login as auth_login
 
 class firstview(TemplateView):
 	template_name='html/home.html'
@@ -14,7 +15,21 @@ class firstview(TemplateView):
 activeuser=None
 searchuser=None
 
-def register(request):
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            auth_login(request, user)
+            
+    else:
+        form = SignUpForm()
+    return render(request, 'html/register.html', {'form': form})
+
+'''def register(request):
 	if request.method == 'POST':
 		form=Register(request.POST)
 		if form.is_valid():
@@ -30,10 +45,10 @@ def register(request):
 			return HttpResponse('fill the entries properly')
 	else:
 		form=Register()
-	return render(request,'html/register.html',{'form':form})
+	return render(request,'html/register.html',{'form':form})'''
 
 
-def login(request):
+'''def login(request):
 	global activeuser
 	if request.method =='POST':
 		form=Login(request.POST)
@@ -61,6 +76,24 @@ def login(request):
 
 
 	return render(request,'html/login.html',{'form':form})	
+	'''
+
+def login(request):
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		user = authenticate(request, username=username, password=password)
+		if user is not None:
+			auth_login(request, user)
+			return HttpResponse('valid user')
+        
+		else:
+			return HttpResponse('invalid response')
+	else:
+		form=Login()
+			
+	return render(request,'html/login.html',{'form':form})		
+
 
 
 def search(request):
